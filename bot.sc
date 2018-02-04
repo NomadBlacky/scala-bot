@@ -17,11 +17,13 @@ def main(): Unit = {
   val system = ActorSystem("sample")
   val actor = system.actorOf(Props[MyActor])
 
-  Stream.continually {
+  val prompt = () => {
     print("\n> ")
-    val input = scala.io.StdIn.readLine.trim
-    if (!input.isEmpty)
-      actor ! input
-    input
-  }.takeWhile(_ != "exit").foreach(_ => ())
+    scala.io.StdIn.readLine.trim
+  }
+
+  Stream.continually(prompt())
+    .filterNot(_.isEmpty)
+    .takeWhile(_ != "exit")
+    .foreach(input => actor ! input)
 }
