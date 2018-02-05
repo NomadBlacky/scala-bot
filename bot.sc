@@ -30,7 +30,9 @@ def main(
 
   val prompt = () => {
     print("\n> ")
-    scala.io.StdIn.readLine.trim
+    Option(scala.io.StdIn.readLine)
+      .map(_.trim)
+      .getOrElse("")
   }
 
   Stream.continually(prompt())
