@@ -45,7 +45,7 @@ def main(
         case Failure(t) if t.isInstanceOf[java.util.concurrent.TimeoutException] =>
           println("timeout")
         case Failure(t) =>
-          println(t.printStackTrace)
+          t.printStackTrace
       }
     })
 }
