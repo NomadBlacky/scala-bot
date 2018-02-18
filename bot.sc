@@ -1,5 +1,8 @@
 import $ivy.`com.typesafe.akka::akka-actor:2.5.9`
 
+import ammonite.ops._
+import ammonite.ops.ImplicitWd._
+
 import akka.actor.{Actor, ActorSystem, Props}
 import akka.event.Logging
 import akka.pattern.ask
@@ -9,6 +12,7 @@ import scala.concurrent._
 import scala.concurrent.duration._
 import scala.util.{Success, Failure, Try}
 
+val youtubeVideoRegexp = """(https://www.youtube.com/watch\?v=\w+)""".r
 
 class MyActor extends Actor {
   val log = Logging(context.system, this)
@@ -16,6 +20,8 @@ class MyActor extends Actor {
   def receive = {
     case "test" => log.info("received test!")
     case "ping" => sender ! "pong"
+    case youtubeVideoRegexp(url) =>
+      %`youtube-dl` url
     case _      => log.info("received unknown message!")
   }
 }
